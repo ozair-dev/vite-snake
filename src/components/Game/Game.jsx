@@ -97,7 +97,7 @@ const Game = (props) => {
       if(current>score.high){
         newScore.high = current
       }
-      return newScore;
+      return {...score, ...newScore};
     });
     cookSnack();
     growSnake();
@@ -111,7 +111,7 @@ const Game = (props) => {
         newScore.high=current
       }
 
-      return newScore;
+      return {...score, ...newScore};
     })
     setBonusSnack(null);
     setNextBonusAt(nextBonusAt=>nextBonusAt+5);
