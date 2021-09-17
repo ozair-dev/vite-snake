@@ -40,7 +40,7 @@ const Game = (props) => {
         snake.direction = directions[directions.length-1];
         if(directions.length>1){
           setDirections(directions=>{
-            let newDirections = directions.slice(0, directions.length-1);
+            const newDirections = directions.slice(0, directions.length-1);
             return newDirections;
           })
         }
@@ -92,9 +92,12 @@ const Game = (props) => {
 
   const handleSnackEat = () =>{
     setScore(score=>{
-      let current = score.current+1;
-      let high = current>score.high?current:score.high;
-      return {current, high};
+      const current = score.current+1;
+      const newScore = {current}
+      if(current>score.high){
+        newScore.high = current
+      }
+      return newScore;
     });
     cookSnack();
     growSnake();
@@ -102,16 +105,20 @@ const Game = (props) => {
 
   const handleBonusSnackEat = ()=>{
     setScore(score=>{
-      let current = score.current+5;
-      let high = current
-      return {current, high}
+      const current = score.current+5;
+      const newScore={current}
+      if(current>score.high){
+        newScore.high=current
+      }
+
+      return newScore;
     })
     setBonusSnack(null);
     setNextBonusAt(nextBonusAt=>nextBonusAt+5);
   }
 
   const checkIfAte = ()=>{
-    let head = snakes[snakes.length-1];
+    const head = snakes[snakes.length-1];
     let crashedWith;
     for(let i=0; i<snakes.length; i++){
       if(head.index === snakes[i].index && snakes[i]!==head){
@@ -151,12 +158,12 @@ const Game = (props) => {
   }
 
   const playGame = () =>{
-    let newSnakes = snakes.slice();
+    const newSnakes = snakes.slice();
     updateSnakes(newSnakes)
     checkIfAte();
     if(nextBonusAt===score.current && !bonusSnack)  cookBonusSnack()
     else if(bonusSnack) setBonusSnack((bonusSnack)=>{
-      let duration = bonusSnack?.duration-DELAY;
+      const duration = bonusSnack?.duration-DELAY;
       if(duration>0)  return {...bonusSnack, duration}
       else {
         return null;
@@ -183,7 +190,7 @@ const Game = (props) => {
   }
 
   const handleKeyDown = (e)=>{
-    let newDirection = e.code.slice(5).toLowerCase();
+    const newDirection = e.code.slice(5).toLowerCase();
     if(movement[newDirection]){
       addNewDirection(newDirection)
     }
@@ -204,7 +211,7 @@ const Game = (props) => {
       const boxesCount = columns*rows;
       setBoardData(Object.assign({},boardData, {boxesCount, boxSize, rows}))
       makeNewSnake(boxesCount)
-      let highscore = JSON.parse(localStorage.getItem('highscore'));
+      const highscore = JSON.parse(localStorage.getItem('highscore'));
       if(highscore) setScore(score=>{
         score.high = highscore;
         return score;
@@ -237,7 +244,7 @@ function useInterval(callback, delay) {
       savedCallback.current();
     }
     if (delay !== null) {
-      let id = setInterval(tick, delay);
+      const id = setInterval(tick, delay);
       return () => clearInterval(id);
     }
   }, [delay]);
