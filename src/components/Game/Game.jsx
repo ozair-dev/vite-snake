@@ -103,7 +103,8 @@ const Game = (props) => {
   const handleBonusSnackEat = ()=>{
     setScore(score=>{
       let current = score.current+5;
-      return {...score, current}
+      let high = current
+      return {current, high}
     })
     setBonusSnack(null);
     setNextBonusAt(nextBonusAt=>nextBonusAt+5);
